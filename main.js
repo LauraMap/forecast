@@ -63,7 +63,7 @@ async function showForecast(url, latlng) {
         markup += `<img src="${img}" style="width:32px;" title="${timeseries[i].time.toLocaleString()}">`
         //console.log(icon, img);
     }
-    L.popup().setLatLng(latlng).setContent(markup).openOn(map);
+    L.popup().setLatLng(latlng).setContent(markup).openOn(themaLayer.forecast);
 }
 
 // auf Kartenklick reagieren (Event via map.on)
