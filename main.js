@@ -43,7 +43,7 @@ async function showForecast(url, latlng) {
 
     let timeseries = jsondata.properties.timeseries;
 
-    let marker = `
+    let markup = `
         <h4>Wetter für ${latlng.lat.toFixed(4)}, ${latlng.lng.toFixed(4)} (${timestamp})</h4>
         <table>
             <tr><td>Luftdruck (hPa)</td><td>${current.air_pressure_at_sea_level}</td></tr>
@@ -57,9 +57,13 @@ async function showForecast(url, latlng) {
 
     // Wettersymbole hinzufügen
     for (let i =0; i<=24; i+=3) {
-        console.log(timeseries[i]);
+        //console.log(timeseries[i]);
+        let icon = timeseries[i].data.next_1_hours.summary.symbol_code;
+        let img = `icons/${icon}.svg`;
+        markup += `<img src="${img}" style="width:32px;" title="${timeseries[i].time.toLocaleString()}">`
+        console.log(icon, img);
     }
-    L.popup().setLatLng(latlng).setContent(marker).openOn(map);
+    L.popup().setLatLng(latlng).setContent(markup).openOn(map);
 }
 
 // auf Kartenklick reagieren (Event via map.on)
