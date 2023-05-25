@@ -61,7 +61,7 @@ async function showForecast(url, latlng) {
         let icon = timeseries[i].data.next_1_hours.summary.symbol_code;
         let img = `icons/${icon}.svg`;
         markup += `<img src="${img}" style="width:32px;" title="${timeseries[i].time.toLocaleString()}">`
-        console.log(icon, img);
+        //console.log(icon, img);
     }
     L.popup().setLatLng(latlng).setContent(markup).openOn(map);
 }
@@ -77,3 +77,27 @@ map.on("click", function(evt) {
 map.fireEvent("click", {
     latlng: L.latLng(ibk.lat, ibk.lng)
 })
+
+// Winddaten laden 
+async function loadWind(url) {
+    let response = await fetch(url);
+    let jsondata = await response.json();
+    console.log(jsondata);
+
+    let velocityLayer = L.velocityLayer({
+        displayValues: true,
+        lineWidth: 2,
+        displayOptions: {
+        
+            velocityType: "",
+          position: "bottomright",
+          emptyString: "Keine Daten vorhanden",
+          speedUnit: "k/h",
+          directionString: "Windrichtung",
+          speedString: "Windgeschwindigkeit",
+        },
+        data: jsondata,
+      }).addTo(map);
+}
+loadWind("https://geographie.uibk.ac.at/data/ecmwf/data/wind-10u-10v-europe.json");
+
